@@ -1,11 +1,18 @@
-// Criadores do Código: Diego Lopes Sakata, Jonathan Batista Bispo, Matheus Arthur, Denis Ramos e Caue Ferreira.
-// Código consertado em sala.
+/*--------------------------------------------------------*
+* Disciplina: Programaçao Estruturada e Modular *
+*          Prof. Carlos Veríssimo                                    *
+*--------------------------------------------------------*
+* Objetivo do Programa: Calcular a nota final de um candidato para a vaga de estágiario da empresa de TI.      *
+* Data - 23/08/2024                                              * 
+* Autores: Diego Lopes Sakata, Jonathan Batista Bispo, Matheus Arthur, Diego Silva, Dennis Ramos, Caue Ferreira e Pedro Yun  * 
+*--------------------------------------------------------*/
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main()
 {
-    int n, i, t, a = 0, cont = 1, loop;
+    int n, i, a, t, cont = 1, loop;
     
     printf("Esse programa calculará a nota final do candidato.\n");
     printf("Quantas categorias diferentes existem?\n");
@@ -13,7 +20,10 @@ int main()
     scanf("%i",&n);
     
     if(n > 0){
-    char cat[n][100];
+    char **cat = (char **)malloc(n * sizeof(char *));
+    for (i = 0; i < n; i++) {
+            cat[i] = (char *)malloc(100 * sizeof(char)); 
+        }
     
     for(i = 0; i < n; i++){
         printf("Digite o nome da %i categoria: ",cont);
@@ -21,7 +31,7 @@ int main()
         cont++;
     }
     
-    int test[n], b = n - 1;
+    int *test = (int *)malloc(n * sizeof(int));
     
     for(i = 0; i < n; i++){
         printf("Quantos testes tem na categoria %s: ",cat[i]);
@@ -33,17 +43,18 @@ int main()
         }
     }
     
+    float **notas = (float **)malloc(n * sizeof(float *));
     for(i = 0; i < n; i++){
-        if (a < test[i]){
-            a = test[i];
-        }
+        notas[i] = (float *)malloc(test[i] * sizeof(float));
     }
     
-    float notas[n][a], maior[n], menor[n], soma[n+1];
+    float *maior = (float *)malloc(n * sizeof(float));
+    float *menor = (float *)malloc(n * sizeof(float));
+    float *soma = (float *)malloc(n * sizeof(float));
     
     
     for(i = 0; i < n; i++){
-        printf("Digite as notas dos testes de %s\n",cat[i]);
+        printf("Digite as notas dos testes de %s:\n",cat[i]);
         for(a = 0; a < test[i]; a++){
             scanf("%f",&notas[i][a]);
             if(notas[i][a] < 0 || notas[i][a] > 10){
@@ -66,15 +77,28 @@ int main()
         
         if(t > 0){
             cont = 1;
+            
+            int b = n;
             n = n + t;
             
-            for(i = b; i < t; i++){
+            cat = (char **)realloc(cat, n * sizeof(char *));
+            for(i = b; i < n; i++){
+                cat[i] = (char *)malloc(100 * sizeof(char));
+            }
+            
+            test = (int *)realloc(test, n * sizeof(int));
+            notas = (float **)realloc(notas, n * sizeof(float *));
+            maior = (float *)realloc(maior, n * sizeof(float));
+            menor = (float *)realloc(menor, n * sizeof(float));
+            soma = (float *)realloc(soma, n * sizeof(float));
+            
+            for(i = b; i < n; i++){
                 printf("Digite o nome da %i categoria nova: \n",cont);
                 scanf(" %99[^\n]",cat[i]);
                 cont++;
             }
             
-            for(i = b; i < t; i++){
+            for(i = b; i < n; i++){
                 printf("Digite a quantidade de testes da categoria %s: ",cat[i]);
                 scanf("%i",&test[i]);
                 while(test[i] <= 2){
@@ -84,15 +108,13 @@ int main()
                 }
             }
             
-            for(i = 0; i < n; i++){
-                if (a < test[i]){
-                    a = test[i];
-                }
-            }
-            
             for(i = b; i < n; i++){
-                printf("Digite as notas dos testes de %s\n",cat[i]);
-                for(a = b; a < test[i]; a++){
+                notas[i] = (float *)malloc(test[i] * sizeof(float));
+            }
+
+            for(i = b; i < n; i++){
+                printf("Digite as notas dos testes de %s:\n",cat[i]);
+                for(a = 0; a < test[i]; a++){
                     scanf("%f",&notas[i][a]);
                     if(notas[i][a] < 0 || notas[i][a] > 10){
                         printf("As notas devem ser entre 0 e 10.\n");
@@ -119,6 +141,7 @@ int main()
     for(i = 0; i < n; i++){
         maior[i] = 0;
         menor[i] = 10;
+        soma[i] = 0;
         for(a = 0; a < test[i]; a++){
             if(maior[i] < notas[i][a]){
                 maior[i] = notas[i][a];
@@ -126,25 +149,15 @@ int main()
             if(menor[i] > notas[i][a]){
                 menor[i] = notas[i][a];
             }
+            soma[i] = soma [i] + notas[i][a];
         }
+        soma[i] = soma[i] - maior[i] - menor[i];
     }
     
-    for(i = 0; i < n; i++){
-        soma[i] = 0;
-        
-        for(a = 0; a < test[i]; a++){
-                soma[i] = soma[i] + notas[i][a];
-        }
-    }
+    float notaf = 0;
     
-    for(i = 0; i < n; i++){
-        soma[i] = soma [i] - menor [i] - maior[i];
-    }
-    
-    soma[n+1] = 0;
-    
-    for(i = 0; i < n; i++){
-        soma[n+1] = soma[n+1] + soma[i];
+    for(i = 0; i < n + t; i++){
+        notaf = notaf + soma[i];
     }
     
     // A partir daqui o "é" está escrito como "eh", pois algumas vezes o acento agudo pode dar problema na línguagem C e não aparecer.
@@ -153,7 +166,7 @@ int main()
         printf("A nota da categoria %s eh: %.2f\n",cat[i],soma[i]);
     }
     
-    printf("A nota final do candidato eh: %.2f",soma[n+1]);
+    printf("A nota final do candidato eh: %.2f",notaf);
     
     }
     
