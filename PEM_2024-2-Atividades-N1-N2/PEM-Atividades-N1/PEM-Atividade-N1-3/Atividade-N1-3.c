@@ -1,10 +1,10 @@
-/*--------------------------------------------------------*
-* Disciplina: Programaçao Estruturada e Modular *
-*          Prof. Carlos Veríssimo                                    *
+/*-------------------------------------------------------*
+* Disciplina: Programaçao Estruturada e Modular          *
+*          Prof. Carlos Veríssimo                        *
 *--------------------------------------------------------*
-* Objetivo do Programa: Criar um tabuleiro de Xadrez.      *
-* Data - 30/08/2024                                              * 
-* Autores: Jonathan Batista Bispo* 
+* Objetivo do Programa: Criar um tabuleiro de Xadrez.    *
+* Data - 30/08/2024                                      * 
+* Autores: Jonathan Batista Bispo                        * 
 *--------------------------------------------------------*/
 
 #include <stdio.h>
@@ -25,19 +25,14 @@ int main()
                     for(coluna = 0; coluna < i; coluna++)
                     {
                         printf("%c%c",cor[casa],pecas[coluna]);
-                        if(coluna < 3)
+                        if(coluna < 5)
                         {
                             printf("1 ");
                         }
-                        else if(coluna > 4)
-                        {
-                            printf("8 ");
-                        }
                         else
                         {
-                            printf("  ");
+                            printf("2 ");
                         }
-                            
                     }
                 break;
 
@@ -61,17 +56,13 @@ int main()
                     for(coluna = 0; coluna < i; coluna++)
                     {
                         printf("%c%c",cor[casa],pecas[coluna]);
-                        if(coluna < 3)
+                        if(coluna < 5)
                         {
                             printf("1 ");
                         }
-                        else if(coluna > 4)
-                        {
-                            printf("8 ");
-                        }
                         else
                         {
-                            printf("  ");
+                            printf("2 ");
                         }
                     }
                     break;
